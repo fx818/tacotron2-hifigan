@@ -3,6 +3,9 @@ from librosa.filters import mel as librosa_mel_fn
 from audio_processing import dynamic_range_compression
 from audio_processing import dynamic_range_decompression
 from stft import STFT
+from hparams import create_hparams
+hparams = create_hparams()
+
 
 
 class LinearNorm(torch.nn.Module):
@@ -48,7 +51,12 @@ class TacotronSTFT(torch.nn.Module):
         self.sampling_rate = sampling_rate
         self.stft_fn = STFT(filter_length, hop_length, win_length)
         mel_basis = librosa_mel_fn(
-            sampling_rate, filter_length, n_mel_channels, mel_fmin, mel_fmax)
+            sr=hparams.sampling_rate,          # Sampling rate
+            n_fft=hparams.n_fft,              # FFT size
+            n_mels=hparams.num_mels,          # Number of Mel bands
+            fmin=hparams.mel_fmin,            # Minimum frequency
+            fmax=hparams.mel_fmax             # Maximum frequency
+        )
         mel_basis = torch.from_numpy(mel_basis).float()
         self.register_buffer('mel_basis', mel_basis)
 

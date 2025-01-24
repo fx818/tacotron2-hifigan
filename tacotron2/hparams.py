@@ -9,7 +9,7 @@ HParams = namedtuple('HParams', [
     'dist_backend', 'dist_url', 'cudnn_enabled', 'cudnn_benchmark', 'ignore_layers',
     'load_mel_from_disk', 'training_files', 'validation_files', 'text_cleaners',
     'max_wav_value', 'sampling_rate', 'filter_length', 'hop_length', 'win_length', 'n_mel_channels',
-    'mel_fmin', 'mel_fmax', 'n_symbols', 'symbols_embedding_dim', 'encoder_kernel_size', 
+    'mel_fmin', 'mel_fmax', 'n_fft', 'num_mels', 'n_symbols', 'symbols_embedding_dim', 'encoder_kernel_size', 
     'encoder_n_convolutions', 'encoder_embedding_dim', 'n_frames_per_step', 'decoder_rnn_dim', 
     'prenet_dim', 'max_decoder_steps', 'gate_threshold', 'p_attention_dropout', 'p_decoder_dropout',
     'attention_rnn_dim', 'attention_dim', 'attention_location_n_filters', 'attention_location_kernel_size', 
@@ -47,6 +47,8 @@ def create_hparams(hparams_string=None, verbose=False):
         n_mel_channels=80,
         mel_fmin=0.0,
         mel_fmax=8000.0,
+        n_fft=1024,
+        num_mels=80,
 
         n_symbols=len(symbols),
         symbols_embedding_dim=512,
@@ -83,7 +85,7 @@ def create_hparams(hparams_string=None, verbose=False):
 
     # Parse additional parameters from the hparams_string if provided
     if hparams_string:
-        tf.logging.info('Parsing command line hparams: %s', hparams_string)
+        tf.get_logger().info('Parsing command line hparams: %s', hparams_string)
         # Handle the parsing of the string and update hparams (not implemented in NamedTuple)
         # For example, you can use a library like argparse or manually parse it
 

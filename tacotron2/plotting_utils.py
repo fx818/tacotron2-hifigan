@@ -5,10 +5,24 @@ import numpy as np
 
 
 def save_figure_to_numpy(fig):
-    # save it to a numpy array.
-    data = np.fromstring(fig.canvas.tostring_rgb(), dtype=np.uint8, sep='')
-    data = data.reshape(fig.canvas.get_width_height()[::-1] + (3,))
+    # Save it to a numpy array.
+    fig.canvas.draw()  # Ensure the figure is rendered before getting the image data.
+    
+    # Get the raw image data from the figure using the ARGB format
+    data = np.frombuffer(fig.canvas.tostring_argb(), dtype=np.uint8)
+    
+    # Get the width and height of the figure and reshape the data accordingly
+    width, height = fig.canvas.get_width_height()
+    
+    # Reshape the data to the shape (height, width, 4) for ARGB image
+    data = data.reshape((height, width, 4))  # Height x Width x 4 (ARGB)
+    
+    # Convert ARGB to RGB by discarding the alpha channel
+    data = data[..., 1:]  # Discard the alpha channel (1st channel)
+    
     return data
+
+
 
 
 def plot_alignment_to_numpy(alignment, info=None):
