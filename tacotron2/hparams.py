@@ -90,6 +90,6 @@ def create_hparams(hparams_string=None, verbose=False):
         # For example, you can use a library like argparse or manually parse it
 
     if verbose:
-        tf.logging.info('Final parsed hparams: %s', hparams)
+        tf.get_logger().info('Final parsed hparams: %s', hparams)
 
     return hparams
